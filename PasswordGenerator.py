@@ -9,3 +9,9 @@ header=ctk.CTkLabel(master=window,text="Login to Your Account")
 header.pack()
 window.mainloop()
 
+<<<<<<< HEAD
+=======
+print("Benjamin Edelman")
+
+# test
+>>>>>>> 28f8c06b4c261e3917f1dd2da063d221b22e78fb
