@@ -1,3 +1,24 @@
+# program functions/constants
+user_data={}
+global userdata
+def get_data():
+    global username
+    global password
+    username=username_ent.get()
+    password=password_ent.get()
+def create_account(frame):
+    frame.destroy()
+    right_frame = ctk.CTkFrame(window, 
+                           width=275, 
+                           height=450,
+                           bg_color="transparent")
+    right_frame.pack(side="right", 
+                    fill="both", 
+                    expand=True)
+    right_frame.pack_propagate(False)
+    prompt = ctk.CTkLabel(right_frame,text="Sign Up")
+    prompt.pack(anchor="n")
+
 # Importing modules
 import customtkinter as ctk
 from PIL import Image
@@ -10,7 +31,7 @@ ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("dark-blue")
 window = ctk.CTk()
 window.geometry("550x300")
-window.title("Login")
+window.title("Password Generator")
 window.resizable(False, False)
 
 # Creating frames
@@ -33,7 +54,7 @@ left_frame.pack_propagate(False)
 
 # Creating and packing header
 header = ctk.CTkLabel(right_frame, 
-                      text="Welcome back!", 
+                      text="Password Generator", 
                       font=font1,text_color="white")
 header.pack(pady=12,
             anchor="n")
@@ -65,6 +86,7 @@ password_ent = ctk.CTkEntry(uandp_frame,
 password_ent.pack(padx=20,
                   pady=15)
 submit = ctk.CTkButton(uandp_frame, 
+                       command=get_data,
                        width=225, 
                        height=35, 
                        corner_radius=5,
@@ -72,6 +94,7 @@ submit = ctk.CTkButton(uandp_frame,
                        fg_color="#a649ff")
 submit.pack(pady=5)
 submit2 = ctk.CTkButton(uandp_frame, 
+                        command=lambda:create_account(right_frame),
                         width=225, 
                         height=35, 
                         corner_radius=5,
@@ -80,8 +103,8 @@ submit2 = ctk.CTkButton(uandp_frame,
 submit2.pack(pady=5)
 
 # Creating and packing image
-img1 = ctk.CTkImage(light_image=Image.open(r"C:\Users\Ben Edelman\PasswrdGenerator\menuicon.PNG"), 
-                    dark_image=Image.open(r"C:\Users\Ben Edelman\PasswrdGenerator\menuicon.PNG"), 
+img1 = ctk.CTkImage(light_image=Image.open(r"menuicon.PNG"), 
+                    dark_image=Image.open(r"menuicon.PNG"), 
                     size=(275, 450))
 img_lab = ctk.CTkLabel(left_frame, 
                        text="", 
