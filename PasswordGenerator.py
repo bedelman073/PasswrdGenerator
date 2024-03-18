@@ -41,6 +41,16 @@ def get_data():
     username = username_ent.get()
     password = password_ent.get()
 
+def check_data(window):
+    global newusername, newpassword
+    newusername = newusername_ent.get()
+    newpassword = newpassword_ent.get()
+    if newusername in user_data.keys():
+        errorlabel = ctk.CTkLabel(window,text="User is already in database",text_color="red")
+        errorlabel.pack()
+    else:
+        user_data[newusername]=ENCRYPTEDPASSWORD
+
 def create_account(frame):
     # Destroying the old frame and adding a new one
     frame.destroy()
@@ -53,13 +63,14 @@ def create_account(frame):
     # Creating a new uandp frame and new data entries 
     uandp_frame = ctk.CTkFrame(right_frame, width=200, height=300, fg_color="transparent")
     uandp_frame.pack()
-    username_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Username",
+    global newusername_ent, newpassword_ent
+    newusername_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Username",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe")
-    username_ent.pack(padx=20, pady=10)
-    password_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Password",
+    newusername_ent.pack(padx=20, pady=10)
+    newpassword_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Password",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe", show="*")
-    password_ent.pack(padx=20, pady=10)
-    submit = ctk.CTkButton(uandp_frame, width=225, height=35, corner_radius=5, text="Submit",
+    newpassword_ent.pack(padx=20, pady=10)
+    submit = ctk.CTkButton(uandp_frame, command=lambda:check_data(right_frame), width=225, height=35, corner_radius=5, text="Submit",
                        fg_color="#a649ff")
     submit.pack(pady=5)
 
