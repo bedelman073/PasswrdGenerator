@@ -3,7 +3,9 @@ user_data = {}
 global userdata
 
 def homepage(root):
+    
     global right_frame,left_frame,username_ent,password_ent
+    
     # Creating frames
     right_frame = ctk.CTkFrame(root, width=275, height=450, bg_color="transparent")
     right_frame.pack(side="right", fill="both", expand=True)
@@ -36,21 +38,6 @@ def homepage(root):
                             corner_radius=5, text="I Don't Have A Profile", fg_color="#a649ff")
     submit2.pack(pady=5)
 
-def get_data():
-    global username, password
-    username = username_ent.get()
-    password = password_ent.get()
-
-def check_data(window):
-    global newusername, newpassword
-    newusername = newusername_ent.get()
-    newpassword = newpassword_ent.get()
-    if newusername in user_data.keys():
-        errorlabel = ctk.CTkLabel(window,text="User is already in database",text_color="red")
-        errorlabel.pack()
-    else:
-        user_data[newusername]=ENCRYPTEDPASSWORD
-
 def create_account(frame):
     # Destroying the old frame and adding a new one
     frame.destroy()
@@ -73,6 +60,23 @@ def create_account(frame):
     submit = ctk.CTkButton(uandp_frame, command=lambda:check_data(right_frame), width=225, height=35, corner_radius=5, text="Submit",
                        fg_color="#a649ff")
     submit.pack(pady=5)
+
+# funciton to get the homescreen username and password
+def get_data():
+    global username, password
+    username = username_ent.get()
+    password = password_ent.get()
+
+# function that checks if the user is already in the system, and records them as a new user and encrypts their password if they are not 
+def check_data(window):
+    global newusername, newpassword
+    newusername = newusername_ent.get()
+    newpassword = newpassword_ent.get()
+    if newusername in user_data.keys():
+        errorlabel = ctk.CTkLabel(window,text="User is already in database",text_color="red")
+        errorlabel.pack()
+    else:
+        user_data[newusername]=ENCRYPTEDPASSWORD
 
 # Importing modules
 import customtkinter as ctk
