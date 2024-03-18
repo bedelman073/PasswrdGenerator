@@ -1,7 +1,6 @@
 # Program functions/constants
-user_data = {}
-global userdata
 
+# password hashing function that stores encrypted data in a .txt file
 def encrypt(password):
     hashed_password = hashlib.sha256()
     hashed_password.update(password.encode('utf-8'))
@@ -9,6 +8,7 @@ def encrypt(password):
     with open("hashed_pws.txt","r+") as file:
         file.seek(0,2)
         file.write(f"{newusername}{encrypted_password}\n")
+    return encrypted_password
 
 def homepage(root):
     
@@ -69,22 +69,34 @@ def create_account(frame):
                        fg_color="#a649ff")
     submit.pack(pady=5)
 
-# funciton to get the homescreen username and password
+# funciton to get the homescreen username and password, and checks the credentials 
 def get_data():
     global username, password
     username = username_ent.get()
     password = password_ent.get()
+    with open("hashed_pws.txt","r") as file:
+        if username+encrypt(password) in file:
+            return True
+        else:
+            errorlabel = ctk.CTkLabel(right_frame,text="Username or Password does not match",text_color="red")
+            errorlabel.pack()
 
 # function that checks if the user is already in the system, and records them as a new user and encrypts their password if they are not 
-def check_data(window):
+def check_data(frame):
     global newusername, newpassword
-    newusername = newusername_ent.get()
+    newusername = newusername_ent.get().strip()  # Strip leading/trailing whitespace
     newpassword = newpassword_ent.get()
-    if newusername in user_data.keys():
-        errorlabel = ctk.CTkLabel(window,text="User is already in database",text_color="red")
-        errorlabel.pack()
-    else:
+    with open("hashed_pws.txt", "r") as file:
+        for line in file:
+            if newusername in line:
+                errorlabel = ctk.CTkLabel(frame, text="User is already in the database", text_color="red")
+                errorlabel.pack()
+                return
         encrypt(newpassword)
+        successlabel = ctk.CTkLabel(frame, text="Registration successful!\nReturning to Homepage...", text_color="#66ff00",font=font3)
+        successlabel.pack(pady=20)
+        frame.after(3000, lambda: frame.destroy())
+        homepage(window)
 
 # Importing modules
 import customtkinter as ctk
@@ -94,7 +106,7 @@ import hashlib
 # Setting fonts
 font1 = ("Helvetica Neue", 25, "bold")
 font2 = ("Helvetica Neue", 15, "bold")
-
+font3 = ("Helvetica Neue", 12, "bold")
 # Creating a window
 ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("dark-blue")
