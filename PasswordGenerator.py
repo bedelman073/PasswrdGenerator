@@ -2,6 +2,13 @@
 user_data = {}
 global userdata
 
+def encrypt(password):
+    hashed_password = hashlib.sha256()
+    hashed_password.update(password.encode('utf-8'))
+    encrypted_password = hashed_password.hexdigest()
+    with open("hashed_pws.txt","r+") as file:
+        file.write(f"{newusername}+{encrypted_password}+\n")
+
 def homepage(root):
     
     global right_frame,left_frame,username_ent,password_ent
@@ -76,11 +83,12 @@ def check_data(window):
         errorlabel = ctk.CTkLabel(window,text="User is already in database",text_color="red")
         errorlabel.pack()
     else:
-        user_data[newusername]=ENCRYPTEDPASSWORD
+        encrypt(newpassword)
 
 # Importing modules
 import customtkinter as ctk
 from PIL import Image
+import hashlib
 
 # Setting fonts
 font1 = ("Helvetica Neue", 25, "bold")
