@@ -7,7 +7,8 @@ def encrypt(password):
     hashed_password.update(password.encode('utf-8'))
     encrypted_password = hashed_password.hexdigest()
     with open("hashed_pws.txt","r+") as file:
-        file.write(f"{newusername}+{encrypted_password}+\n")
+        file.seek(0,2)
+        file.write(f"{newusername}{encrypted_password}\n")
 
 def homepage(root):
     
