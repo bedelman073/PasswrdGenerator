@@ -30,10 +30,10 @@ def homepage(root):
     # Creating and packing entry widgets
     username_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Username",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe")
-    username_ent.pack(padx=20, pady=15)
+    username_ent.pack(padx=20, pady=8)
     password_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Password",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe", show="*")
-    password_ent.pack(padx=20, pady=15)
+    password_ent.pack(padx=20, pady=8)
 
     # Creating buttons
     submit = ctk.CTkButton(uandp_frame, command=get_data, width=225, height=35, corner_radius=5, text="Login",
@@ -46,25 +46,33 @@ def homepage(root):
 def create_account(frame):
     # Destroying the old frame and adding a new one
     frame.destroy()
-    right_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
-    right_frame.pack(side="right", fill="both", expand=True)
+    global right_frame2
+    right_frame2 = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
+    right_frame2.pack(side="right", fill="both", expand=True)
     # Prompting for data entry
-    right_frame.pack_propagate(False)
-    prompt = ctk.CTkLabel(right_frame, text="Create Your Account", font=font1)
+    right_frame2.pack_propagate(False)
+    prompt = ctk.CTkLabel(right_frame2, text="Create Your Account", font=font1)
     prompt.pack(pady=12, anchor="n")
     # Creating a new uandp frame and new data entries 
-    uandp_frame = ctk.CTkFrame(right_frame, width=200, height=300, fg_color="transparent")
+    uandp_frame = ctk.CTkFrame(right_frame2, width=200, height=300, fg_color="transparent")
     uandp_frame.pack()
     global newusername_ent, newpassword_ent
     newusername_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Username",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe")
-    newusername_ent.pack(padx=20, pady=10)
+    newusername_ent.pack(padx=20, pady=8)
     newpassword_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Password",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe", show="*")
-    newpassword_ent.pack(padx=20, pady=10)
-    submit = ctk.CTkButton(uandp_frame, command=lambda:check_data(right_frame), width=225, height=35, corner_radius=5, text="Submit",
+    newpassword_ent.pack(padx=20, pady=8)
+    submit = ctk.CTkButton(uandp_frame, command=lambda:check_data(right_frame2), width=225, height=35, corner_radius=5, text="Submit",
                        fg_color="#a649ff")
-    submit.pack(pady=5)
+    submit.pack(pady=5),
+    returnhomebutton = ctk.CTkButton(right_frame2,width=225, command=lambda:returnhome(right_frame2,window), height=35, corner_radius=5, text="Return Home",
+                       fg_color="#a649ff")
+    returnhomebutton.pack()
+
+def returnhome(frame,root):
+    frame.destroy()
+    homepage(root)
 
 # funciton to get the homescreen username and password, and checks the credentials 
 def get_data():
@@ -78,7 +86,7 @@ def get_data():
                 loginlabel.pack()
                 return
         else:
-            errorlabel = ctk.CTkLabel(right_frame,text="Username or Password does not match",text_color="red")
+            errorlabel = ctk.CTkLabel(right_frame,text="Username or Password does not match",text_color="red",font=font3)
             errorlabel.pack()
             return
 
@@ -90,14 +98,14 @@ def check_data(frame):
     with open("hashed_pws.txt", "r") as file:
         for line in file:
             if newusername in line:
-                errorlabel = ctk.CTkLabel(frame, text="User is already in the database", text_color="red")
+                errorlabel = ctk.CTkLabel(frame, text="User is already in the database", text_color="red",font=font3)
                 errorlabel.pack()
                 return
     encrypted_password = encrypt(newpassword)
     with open("hashed_pws.txt", "a") as file:
-        file.write(f"{newusername} {encrypted_password}\n")
-    successlabel = ctk.CTkLabel(frame, text="Registration successful!\nReturning to Homepage...", text_color="#66ff00",font=font3)
-    successlabel.pack(pady=20)
+        file.write(f"[{newusername},{encrypted_password}]\n")
+    successlabel = ctk.CTkLabel(right_frame2, text="Registration successful!\nReturning to Homepage...", text_color="#66ff00",font=font3)
+    successlabel.pack(pady=8)
     frame.after(3000, lambda: frame.destroy())
     homepage(window)
 
