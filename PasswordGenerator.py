@@ -92,23 +92,22 @@ def get_data():
 
 # function that checks if the user is already in the system, and records them as a new user and encrypts their password if they are not 
 def check_data(frame):
-    global newusername, newpassword
     newusername = newusername_ent.get()
     newpassword = newpassword_ent.get()
     with open("hashed_pws.txt", "r") as file:
         for line in file:
-            if newusername in line:
+            stored_username, _ = line.strip().split(":")  # Splitting the line using ":" as delimiter
+            if newusername == stored_username:
                 errorlabel = ctk.CTkLabel(frame, text="User is already in the database", text_color="red",font=font3)
                 errorlabel.pack()
                 return
     encrypted_password = encrypt(newpassword)
     with open("hashed_pws.txt", "a") as file:
-        file.write(f"[{newusername},{encrypted_password}]\n")
+        file.write(f"{newusername}:{encrypted_password}\n")  # Using ":" as delimiter
     successlabel = ctk.CTkLabel(right_frame2, text="Registration successful!\nReturning to Homepage...", text_color="#66ff00",font=font3)
     successlabel.pack(pady=8)
     frame.after(3000, lambda: frame.destroy())
     homepage(window)
-
 
 # Importing modules
 import customtkinter as ctk
