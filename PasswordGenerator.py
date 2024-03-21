@@ -6,7 +6,6 @@ import hashlib
 import string
 import secrets
 import random
-import time
 
 # Program functions/constants
 
@@ -38,17 +37,14 @@ def homepage():
     submit2.pack(pady=5)
 
 def create_account():
-    # Destroying the old frame and adding a new one
     global account_creation_frame,homepage_frame
     if homepage_frame:
         homepage_frame.destroy()
     account_creation_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
     account_creation_frame.pack(side="right", fill="both", expand=True)
-    # Prompting for data entry
     account_creation_frame.pack_propagate(False)
     prompt = ctk.CTkLabel(account_creation_frame, text="Create Your Account", font=font1)
     prompt.pack(pady=12, anchor="n")
-    # Creating a new uandp frame and new data entries 
     uandp_frame = ctk.CTkFrame(account_creation_frame, width=200, height=300, fg_color="transparent")
     uandp_frame.pack()
     global newusername_ent, newpassword_ent
@@ -65,6 +61,7 @@ def create_account():
                        fg_color="#a649ff")
     returnhomebutton.pack()
 
+# function that lets the user chose what they want to do with the program 
 def user_account_homepage():
     # clearing all old widgets
     for widget in window.winfo_children():
@@ -77,11 +74,37 @@ def user_account_homepage():
     option_frame.pack_propagate(False)
     view_passwords_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="View Passwords", fg_color="#a649ff")
     view_passwords_btn.pack(pady=20)
-    generate_password_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="Generate Password", fg_color="#a649ff")
+    generate_password_btn = ctk.CTkButton(option_frame, command=password_generation_screen, width=225, height=35, corner_radius=5, text="Generate Password", fg_color="#a649ff")
     generate_password_btn.pack(pady=20)
     exp_passwords_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="Export to Secure ZIP", fg_color="#a649ff")
     exp_passwords_btn.pack(pady=20)
     
+def password_generation_screen():
+    for widget in window.winfo_children():
+        widget.destroy()
+    pack_image()
+    password_option_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
+    password_option_frame.pack(side="right", fill="both", expand=True)
+    password_option_frame.pack_propagate(False)
+    password_header=ctk.CTkLabel(password_option_frame,text=f"Password Generator",font=font1)
+    password_header.pack(pady=10)
+    password_subheader=ctk.CTkLabel(password_option_frame,text="Please Select an Option",font=font3)
+    password_subheader.pack(pady=1)             # these two need commands 
+    randpass_btn=ctk.CTkButton(password_option_frame, command=rand_password_screen(),width=225, height=35, corner_radius=5, text="Random Password", fg_color="#a649ff")
+    randpass_btn.pack(pady=15)
+    informedpass_btn=ctk.CTkButton(password_option_frame, width=225, height=35, corner_radius=5, text="Informed Password", fg_color="#a649ff")
+    informedpass_btn.pack(pady=15)
+    return_to_selection_btn=ctk.CTkButton(password_option_frame, command=lambda: user_account_homepage(), width=225, height=35, corner_radius=5, text="Return to Selection", fg_color="#a649ff")
+    return_to_selection_btn.pack(pady=15)
+
+def rand_password_screen():
+    for widget in window.winfo_children():
+        widget.destroy()
+    pack_image()
+    slider_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
+    slider_frame.pack(side="right", fill="both", expand=True)
+    slider_frame.pack_propagate(False)
+
 # creating a function that packs a frame to hold an image to the left side of the program
 def pack_image():
     global window,left_frame
