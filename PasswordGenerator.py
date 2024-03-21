@@ -66,15 +66,31 @@ def create_account():
     returnhomebutton.pack()
 
 def user_account_homepage():
+    # clearing all old widgets
     for widget in window.winfo_children():
         widget.destroy()
-
+    pack_image()
+    user_greeting=ctk.CTkLabel(window,text=f"Welcome, {username}!",font=font1)
+    user_greeting.pack(pady=10)
+    option_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
+    option_frame.pack(side="right", fill="both", expand=True)
+    option_frame.pack_propagate(False)
+    view_passwords_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="View Passwords", fg_color="#a649ff")
+    view_passwords_btn.pack(pady=20)
+    generate_password_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="Generate Password", fg_color="#a649ff")
+    generate_password_btn.pack(pady=20)
+    exp_passwords_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="Export to Secure ZIP", fg_color="#a649ff")
+    exp_passwords_btn.pack(pady=20)
+    
 # creating a function that packs a frame to hold an image to the left side of the program
 def pack_image():
     global window,left_frame
     left_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
     left_frame.pack(side="left", fill="both", expand=True)
     left_frame.pack_propagate(False)
+    img1 = ctk.CTkImage(light_image=Image.open(r"menuicon.PNG"), dark_image=Image.open(r"menuicon.PNG"), size=(275, 450))
+    img_lab = ctk.CTkLabel(left_frame, text="", image=img1)
+    img_lab.pack()
 
 # funciton to get the homescreen username and password, and checks the credentials 
 def get_data():
@@ -149,7 +165,6 @@ def informedPass():
 
     return(password)
 
-
 # Setting fonts
 font1 = ("Helvetica Neue", 25, "bold")
 font2 = ("Helvetica Neue", 15, "bold")
@@ -160,12 +175,9 @@ ctk.set_default_color_theme("dark-blue")
 window = ctk.CTk()
 window.geometry("550x300")
 window.title("Password Generator")
+window.resizable(width=False, height=False)
 # jumpstarting the program 
 homepage()
 pack_image()
-# Creating and packing image
-img1 = ctk.CTkImage(light_image=Image.open(r"menuicon.PNG"), dark_image=Image.open(r"menuicon.PNG"), size=(275, 450))
-img_lab = ctk.CTkLabel(left_frame, text="", image=img1)
-img_lab.pack()
 
 window.mainloop()
