@@ -90,7 +90,7 @@ def password_generation_screen():
     password_header.pack(pady=10)
     password_subheader=ctk.CTkLabel(password_option_frame,text="Please Select an Option",font=font3)
     password_subheader.pack(pady=1)             # these two need commands 
-    randpass_btn=ctk.CTkButton(password_option_frame, command=rand_password_screen(),width=225, height=35, corner_radius=5, text="Random Password", fg_color="#a649ff")
+    randpass_btn=ctk.CTkButton(password_option_frame, command=lambda: rand_password_screen(),width=225, height=35, corner_radius=5, text="Random Password", fg_color="#a649ff")
     randpass_btn.pack(pady=15)
     informedpass_btn=ctk.CTkButton(password_option_frame, width=225, height=35, corner_radius=5, text="Informed Password", fg_color="#a649ff")
     informedpass_btn.pack(pady=15)
@@ -98,12 +98,25 @@ def password_generation_screen():
     return_to_selection_btn.pack(pady=15)
 
 def rand_password_screen():
+    global slider
     for widget in window.winfo_children():
         widget.destroy()
     pack_image()
     slider_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
     slider_frame.pack(side="right", fill="both", expand=True)
     slider_frame.pack_propagate(False)
+    slider_heading = ctk.CTkLabel(slider_frame,text="Chose Password\nLength",font=font1)
+    slider_heading.pack(pady=10)
+    slider = ctk.CTkSlider(slider_frame,width=225,height=20,number_of_steps=10, from_=1,to=10,progress_color="#a649ff",button_color="grey")
+    slider.pack(pady=10)
+    pass_query=ctk.CTkEntry(slider_frame,placeholder_text="What is this password for?",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
+    pass_query.pack(pady=10)
+    gen_pwd_button=ctk.CTkButton(slider_frame,command=get_slider_num,width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
+    gen_pwd_button.pack(pady=10)
+
+def get_slider_num():
+    global password_length
+    password_length=slider.get()
 
 # creating a function that packs a frame to hold an image to the left side of the program
 def pack_image():
@@ -126,7 +139,7 @@ def get_data():
                 loginlabel = ctk.CTkLabel(homepage_frame,text="Logging in...",text_color="#66ff00")
                 loginlabel.pack()
                 homepage_frame.update()  
-                homepage_frame.after(3000, lambda: user_account_homepage())  
+                homepage_frame.after(1500, lambda: user_account_homepage())  
                 return
         else:
             errorlabel = ctk.CTkLabel(homepage_frame,text="Username or Password does not match",text_color="red",font=font3)
