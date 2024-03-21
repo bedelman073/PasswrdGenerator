@@ -11,22 +11,17 @@ import time
 # Program functions/constants
 
 def homepage():
-    
     global window,homepage_frame,left_frame,username_ent,password_ent
-    
     # Creating frames
     homepage_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
     homepage_frame.pack(side="right", fill="both", expand=True)
     homepage_frame.pack_propagate(False)
-
     # Creating and packing header
     header = ctk.CTkLabel(homepage_frame, text="Password Generator", font=font1, text_color="white")
     header.pack(pady=12, anchor="n")
-
     # Creating and packing uandp frame
     uandp_frame = ctk.CTkFrame(homepage_frame, width=200, height=200, fg_color="transparent")
     uandp_frame.pack()
-
     # Creating and packing entry widgets
     username_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Username",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe")
@@ -34,7 +29,6 @@ def homepage():
     password_ent = ctk.CTkEntry(uandp_frame, width=250, height=45, placeholder_text="Password",
                                 text_color="white", placeholder_text_color="white", border_color="#c74afe", show="*")
     password_ent.pack(padx=20, pady=8)
-
     # Creating buttons
     submit = ctk.CTkButton(uandp_frame, command=get_data, width=225, height=35, corner_radius=5, text="Login",
                         fg_color="#a649ff")
@@ -71,6 +65,10 @@ def create_account():
                        fg_color="#a649ff")
     returnhomebutton.pack()
 
+def user_account_homepage():
+    for widget in window.winfo_children():
+        widget.destroy()
+
 # creating a function that packs a frame to hold an image to the left side of the program
 def pack_image():
     global window,left_frame
@@ -88,8 +86,8 @@ def get_data():
             if encrypt(password) in line:
                 loginlabel = ctk.CTkLabel(homepage_frame,text="Logging in...",text_color="#66ff00")
                 loginlabel.pack()
-                time.sleep(3)
-                user_account_homepage()
+                homepage_frame.update()  
+                homepage_frame.after(3000, lambda: user_account_homepage())  
                 return
         else:
             errorlabel = ctk.CTkLabel(homepage_frame,text="Username or Password does not match",text_color="red",font=font3)
@@ -162,7 +160,7 @@ ctk.set_default_color_theme("dark-blue")
 window = ctk.CTk()
 window.geometry("550x300")
 window.title("Password Generator")
-
+# jumpstarting the program 
 homepage()
 pack_image()
 # Creating and packing image
