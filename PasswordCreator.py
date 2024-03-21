@@ -18,11 +18,9 @@ def informedPass():
     for i in range(len(word)):
         if (word[i] in translationdict):
             word = word.replace(word[i],translationdict[word[i]],i-1)
-    print(word)
    
     frontComponent = ''.join(secrets.choice(pwordalphabet) for i in range(2))
     backComponent = ''.join(secrets.choice(pwordalphabet) for i in range(2))
     password = ''.join((frontComponent,word,backComponent))
 
     return(password)
-print(informedPass())

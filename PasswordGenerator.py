@@ -1,17 +1,14 @@
+
+# Importing modules
+import customtkinter as ctk
+from PIL import Image
+import hashlib
+import string
+import secrets
+import random
+import time
+
 # Program functions/constants
-
-# password hashing function that stores encrypted data in a .txt file
-def encrypt(password):
-    hashed_password = hashlib.sha256()
-    hashed_password.update(password.encode('utf-8'))
-    encrypted_password = hashed_password.hexdigest()
-    return encrypted_password
-
-def pack_image():
-    global window,left_frame
-    left_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
-    left_frame.pack(side="left", fill="both", expand=True)
-    left_frame.pack_propagate(False)
 
 def homepage():
     
@@ -74,12 +71,12 @@ def create_account():
                        fg_color="#a649ff")
     returnhomebutton.pack()
 
-def returnhome():
-    global homepage_frame, account_creation_frame
-    if account_creation_frame:
-        account_creation_frame.destroy()
-        homepage()
-
+# creating a function that packs a frame to hold an image to the left side of the program
+def pack_image():
+    global window,left_frame
+    left_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
+    left_frame.pack(side="left", fill="both", expand=True)
+    left_frame.pack_propagate(False)
 
 # funciton to get the homescreen username and password, and checks the credentials 
 def get_data():
@@ -91,6 +88,8 @@ def get_data():
             if encrypt(password) in line:
                 loginlabel = ctk.CTkLabel(homepage_frame,text="Logging in...",text_color="#66ff00")
                 loginlabel.pack()
+                time.sleep(3)
+                user_account_homepage()
                 return
         else:
             errorlabel = ctk.CTkLabel(homepage_frame,text="Username or Password does not match",text_color="red",font=font3)
@@ -116,10 +115,42 @@ def check_data(frame):
     frame.after(3000, lambda: frame.destroy())
     homepage()
 
-# Importing modules
-import customtkinter as ctk
-from PIL import Image
-import hashlib
+# password hashing function that stores encrypted data in a .txt file
+def encrypt(password):
+    hashed_password = hashlib.sha256()
+    hashed_password.update(password.encode('utf-8'))
+    encrypted_password = hashed_password.hexdigest()
+    return encrypted_password
+
+def returnhome():
+    global homepage_frame, account_creation_frame
+    if account_creation_frame:
+        account_creation_frame.destroy()
+        homepage()
+
+# # # # # # # PASSWORD FUNCTIONS # # # # # # # # 
+        
+def randomPass():
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(secrets.choice(alphabet) for i in range(12))
+    return(password)
+
+def informedPass():
+    word = str(input("Please input a word:"))
+    password = ''
+    translationdict = {'e':'3','E':'3','Z':'2','l':'1','L':'1','o':'0','O':'0','S':'5','s':'5','a':'@'}
+    pwordalphabet = (string.punctuation)
+    pwordalphabet = pwordalphabet.replace('&','0')
+    for i in range(len(word)):
+        if (word[i] in translationdict):
+            word = word.replace(word[i],translationdict[word[i]],i-1)
+   
+    frontComponent = ''.join(secrets.choice(pwordalphabet) for i in range(2))
+    backComponent = ''.join(secrets.choice(pwordalphabet) for i in range(2))
+    password = ''.join((frontComponent,word,backComponent))
+
+    return(password)
+
 
 # Setting fonts
 font1 = ("Helvetica Neue", 25, "bold")
