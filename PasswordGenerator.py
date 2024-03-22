@@ -5,7 +5,6 @@ from PIL import Image
 import hashlib
 import string
 import secrets
-import random
 
 # Program functions/constants
 
@@ -97,8 +96,12 @@ def password_generation_screen():
     return_to_selection_btn=ctk.CTkButton(password_option_frame, command=lambda: user_account_homepage(), width=225, height=35, corner_radius=5, text="Return to Selection", fg_color="#a649ff")
     return_to_selection_btn.pack(pady=15)
 
+def on_slider_change(value):
+    val=round(value)
+    num_disp.configure(text=str(val)+" Character(s)")
+
 def rand_password_screen():
-    global slider
+    global slider,num_disp
     for widget in window.winfo_children():
         widget.destroy()
     pack_image()
@@ -107,8 +110,11 @@ def rand_password_screen():
     slider_frame.pack_propagate(False)
     slider_heading = ctk.CTkLabel(slider_frame,text="Chose Password\nLength",font=font1)
     slider_heading.pack(pady=10)
-    slider = ctk.CTkSlider(slider_frame,width=225,height=20,number_of_steps=10, from_=1,to=10,progress_color="#a649ff",button_color="grey")
+    slider = ctk.CTkSlider(slider_frame,command=on_slider_change,width=225,height=20,number_of_steps=10, from_=1,to=10,progress_color="#a649ff",button_color="grey")
     slider.pack(pady=10)
+    slider.set(1)
+    num_disp = ctk.CTkLabel(slider_frame,text="1 Character(s)",font=font1)
+    num_disp.pack(pady=10)
     pass_query=ctk.CTkEntry(slider_frame,placeholder_text="What is this password for?",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
     pass_query.pack(pady=10)
     gen_pwd_button=ctk.CTkButton(slider_frame,command=get_slider_num,width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
