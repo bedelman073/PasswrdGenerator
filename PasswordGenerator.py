@@ -102,7 +102,7 @@ def on_slider_change(value):
     num_disp.configure(text=str(password_length)+" Character(s)")
 
 def rand_password_screen():
-    global slider,num_disp,pass_query
+    global slider_frame,slider,num_disp,pass_query
     for widget in window.winfo_children():
         widget.destroy()
     pack_image()
@@ -122,19 +122,22 @@ def rand_password_screen():
     gen_pwd_button.pack(pady=10)
 
 def informed_password_screen():
+    global informed_frame,informed_entry,informed_pass_query
     for widget in window.winfo_children():
         widget.destroy()
     pack_image()
     informed_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
     informed_frame.pack(side="right", fill="both", expand=True)
     informed_frame.pack_propagate(False)
-    informed_heading = ctk.CTkLabel(informed_frame,text="Chose Password\Inclusion",font=font1)
+    informed_heading = ctk.CTkLabel(informed_frame,text="Chose Password\nInclusion",font=font1)
     informed_heading.pack(pady=10)
-    informed_entry = ctk.CTkEntry(informed_frame,placeholder_text="Enter your inclusion here?",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
+    informed_entry = ctk.CTkEntry(informed_frame,placeholder_text="Enter your inclusion here",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
     informed_entry.pack(pady=10)
-    gen_inf_pwd_button=ctk.CTkButton(informed_frame,command=lambda: informedPass(informed_entry.get()),width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
+    informed_pass_query=ctk.CTkEntry(informed_frame,placeholder_text="What is this password for?",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
+    informed_pass_query.pack(pady=10)
+    gen_inf_pwd_button=ctk.CTkButton(informed_frame,command=lambda: informedPass(entry=informed_entry.get()),width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
     gen_inf_pwd_button.pack(pady=10)
-
+    
 # creating a function that packs a frame to hold an image to the left side of the program
 def pack_image():
     global window,left_frame
@@ -153,7 +156,7 @@ def get_data():
     with open("hashed_pws.txt","r") as file:
         for line in file:
             if encrypt(password) in line:
-                loginlabel = ctk.CTkLabel(homepage_frame,text="Logging in...",text_color="#66ff00")
+                loginlabel = ctk.CTkLabel(homepage_frame,text="Logging in...",text_color="#66ff00",font=font3)
                 loginlabel.pack()
                 homepage_frame.update()  
                 homepage_frame.after(1500, lambda: user_account_homepage())  
@@ -202,22 +205,40 @@ def randomPass(pwlength):
     password = ''.join(secrets.choice(alphabet) for i in range(1,pwlength+1))
     with open(f"{username}PSWRDS.txt","a") as file:
         file.write(f"{pass_query.get()}:{password}\n")
-
-def informedPass():
-    word = str(input("Please input a word:"))
+        file.close()
+    show_password(password)
+def informedPass(entry):
     password = ''
     translationdict = {'e':'3','E':'3','Z':'2','l':'1','L':'1','o':'0','O':'0','S':'5','s':'5','a':'@'}
     pwordalphabet = (string.punctuation)
     pwordalphabet = pwordalphabet.replace('&','0')
-    for i in range(len(word)):
-        if (word[i] in translationdict):
-            word = word.replace(word[i],translationdict[word[i]],i-1)
+    for i in range(len(entry)):
+        if (entry[i] in translationdict):
+            entry = entry.replace(entry[i],translationdict[entry[i]],i-1)
    
     frontComponent = ''.join(secrets.choice(pwordalphabet) for i in range(2))
     backComponent = ''.join(secrets.choice(pwordalphabet) for i in range(2))
-    password = ''.join((frontComponent,word,backComponent))
+    password = ''.join((frontComponent,entry,backComponent))
+    with open(f"{username}PSWRDS.txt","a") as file:
+        file.write(f"{informed_pass_query.get()}:{password}\n")
+        file.close()
+    show_password(password)
 
-    return(password)
+def show_password(pswrd):
+    for widget in window.winfo_children():
+        widget.destroy()
+    pack_image()
+    show_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
+    show_frame.pack(side="right", fill="both", expand=True)
+    show_frame.pack_propagate(False)
+    pwd_header = ctk.CTkLabel(show_frame,text="Your Password:",font=font1)
+    pwd_header.pack(pady=10)
+    pwd = ctk.CTkLabel(show_frame,text=f"{pswrd}",font=font1,text_color="#a649ff")
+    pwd.pack(pady=10)
+    location_header = ctk.CTkLabel(show_frame,text=f"This password is stored in\n{username}PWDS.txt.\nVisit the homepage to protect this file.",font=font3)
+    location_header.pack(pady=10)
+    home_btn = ctk.CTkButton(show_frame,command=lambda: user_account_homepage(),width=225, height=35, corner_radius=5, text="Return Home", fg_color="#a649ff")
+    home_btn.pack(pady=10)
 
 # Setting fonts
 font1 = ("Helvetica Neue", 25, "bold")
