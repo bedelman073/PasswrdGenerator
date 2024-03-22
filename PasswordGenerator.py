@@ -37,6 +37,7 @@ def homepage():
     submit2.pack(pady=5)
 
 def create_account():
+    # creating a screen that allows the user to create a new account by entering a username and password
     global account_creation_frame,homepage_frame
     if homepage_frame:
         homepage_frame.destroy()
@@ -80,6 +81,7 @@ def user_account_homepage():
     logout_btn.pack(pady=20)
 
 def password_generation_screen():
+    # creating a screen that allows the user to chose what kind of password they want to generate
     for widget in window.winfo_children():
         widget.destroy()
     pack_image()
@@ -98,11 +100,13 @@ def password_generation_screen():
     return_to_selection_btn.pack(pady=15)
 
 def on_slider_change(value):
+    # function that changes the label on the screen to tell the user how many characters their password will be 
     global password_length
     password_length=round(value)
     num_disp.configure(text=str(password_length)+" Character(s)")
 
 def rand_password_screen():
+    # creating a screen that allows the user to chose how long they want their password to be using a slider widget, and giving them a submit button
     global slider_frame,slider,num_disp,pass_query
     for widget in window.winfo_children():
         widget.destroy()
@@ -123,6 +127,7 @@ def rand_password_screen():
     gen_pwd_button.pack(pady=10)
 
 def informed_password_screen():
+    # creating a screen that allows the user to input information about their informed password, and holds the button for submission
     global informed_frame,informed_entry,informed_pass_query
     for widget in window.winfo_children():
         widget.destroy()
@@ -140,6 +145,7 @@ def informed_password_screen():
     gen_inf_pwd_button.pack(pady=10)
     
 def logout():
+    # removing all widgets and returning home
     global window
     for widget in window.winfo_children():
         widget.destroy()
@@ -147,6 +153,7 @@ def logout():
     homepage()
 
 def zip_and_secure(file_to_zip,output_zip_file):
+    # checks if the file exists, if it does, the data from the file is written to a zip file protected by their account password
     if not os.path.exists(file_to_zip):
         return
     with open(file_to_zip, 'rb') as file:
@@ -217,7 +224,7 @@ def returnhome():
         homepage()
 
 # # # # # # # PASSWORD FUNCTIONS # # # # # # # # 
-        
+# function for random password creation      
 def randomPass(pwlength):
     alphabet = string.ascii_letters + string.digits + string.punctuation
     password = ''.join(secrets.choice(alphabet) for i in range(1,pwlength+1))
@@ -225,6 +232,8 @@ def randomPass(pwlength):
         file.write(f"{pass_query.get()}:{password}\n")
         file.close()
     show_password(password)
+
+# function for informed password creation
 def informedPass(entry):
     password = ''
     translationdict = {'e':'3','E':'3','Z':'2','l':'1','L':'1','o':'0','O':'0','S':'5','s':'5','a':'@'}
@@ -242,6 +251,7 @@ def informedPass(entry):
         file.close()
     show_password(password)
 
+# creating a screen that allows the user to see the password generated for them
 def show_password(pswrd):
     for widget in window.winfo_children():
         widget.destroy()
@@ -272,5 +282,5 @@ window.resizable(width=False, height=False)
 # jumpstarting the program 
 homepage()
 pack_image()
-
+# running an instance of mainloop to accept new inputs 
 window.mainloop()
