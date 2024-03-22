@@ -91,17 +91,18 @@ def password_generation_screen():
     password_subheader.pack(pady=1)             # these two need commands 
     randpass_btn=ctk.CTkButton(password_option_frame, command=lambda: rand_password_screen(),width=225, height=35, corner_radius=5, text="Random Password", fg_color="#a649ff")
     randpass_btn.pack(pady=15)
-    informedpass_btn=ctk.CTkButton(password_option_frame, width=225, height=35, corner_radius=5, text="Informed Password", fg_color="#a649ff")
+    informedpass_btn=ctk.CTkButton(password_option_frame, command=lambda: informed_password_screen(), width=225, height=35, corner_radius=5, text="Informed Password", fg_color="#a649ff")
     informedpass_btn.pack(pady=15)
     return_to_selection_btn=ctk.CTkButton(password_option_frame, command=lambda: user_account_homepage(), width=225, height=35, corner_radius=5, text="Return to Selection", fg_color="#a649ff")
     return_to_selection_btn.pack(pady=15)
 
 def on_slider_change(value):
-    val=round(value)
-    num_disp.configure(text=str(val)+" Character(s)")
+    global password_length
+    password_length=round(value)
+    num_disp.configure(text=str(password_length)+" Character(s)")
 
 def rand_password_screen():
-    global slider,num_disp
+    global slider,num_disp,pass_query
     for widget in window.winfo_children():
         widget.destroy()
     pack_image()
@@ -117,12 +118,22 @@ def rand_password_screen():
     num_disp.pack(pady=10)
     pass_query=ctk.CTkEntry(slider_frame,placeholder_text="What is this password for?",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
     pass_query.pack(pady=10)
-    gen_pwd_button=ctk.CTkButton(slider_frame,command=get_slider_num,width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
+    gen_pwd_button=ctk.CTkButton(slider_frame,command=lambda: randomPass(password_length),width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
     gen_pwd_button.pack(pady=10)
 
-def get_slider_num():
-    global password_length
-    password_length=slider.get()
+def informed_password_screen():
+    for widget in window.winfo_children():
+        widget.destroy()
+    pack_image()
+    informed_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
+    informed_frame.pack(side="right", fill="both", expand=True)
+    informed_frame.pack_propagate(False)
+    informed_heading = ctk.CTkLabel(informed_frame,text="Chose Password\Inclusion",font=font1)
+    informed_heading.pack(pady=10)
+    informed_entry = ctk.CTkEntry(informed_frame,placeholder_text="Enter your inclusion here?",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
+    informed_entry.pack(pady=10)
+    gen_inf_pwd_button=ctk.CTkButton(informed_frame,command=lambda: informedPass(informed_entry.get()),width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
+    gen_inf_pwd_button.pack(pady=10)
 
 # creating a function that packs a frame to hold an image to the left side of the program
 def pack_image():
@@ -186,10 +197,11 @@ def returnhome():
 
 # # # # # # # PASSWORD FUNCTIONS # # # # # # # # 
         
-def randomPass():
+def randomPass(pwlength):
     alphabet = string.ascii_letters + string.digits + string.punctuation
-    password = ''.join(secrets.choice(alphabet) for i in range(12))
-    return(password)
+    password = ''.join(secrets.choice(alphabet) for i in range(1,pwlength+1))
+    with open(f"{username}PSWRDS.txt","a") as file:
+        file.write(f"{pass_query.get()}:{password}\n")
 
 def informedPass():
     word = str(input("Please input a word:"))
