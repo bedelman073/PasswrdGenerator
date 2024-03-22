@@ -1,10 +1,11 @@
-
 # Importing modules
 import customtkinter as ctk
 from PIL import Image
 import hashlib
 import string
 import secrets
+import os
+import pyzipper
 
 # Program functions/constants
 
@@ -71,13 +72,13 @@ def user_account_homepage():
     option_frame = ctk.CTkFrame(window, width=275, height=450, bg_color="transparent")
     option_frame.pack(side="right", fill="both", expand=True)
     option_frame.pack_propagate(False)
-    view_passwords_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="View Passwords", fg_color="#a649ff")
-    view_passwords_btn.pack(pady=20)
     generate_password_btn = ctk.CTkButton(option_frame, command=password_generation_screen, width=225, height=35, corner_radius=5, text="Generate Password", fg_color="#a649ff")
     generate_password_btn.pack(pady=20)
-    exp_passwords_btn = ctk.CTkButton(option_frame, width=225, height=35, corner_radius=5, text="Export to Secure ZIP", fg_color="#a649ff")
+    exp_passwords_btn = ctk.CTkButton(option_frame, command=zip_and_secure(f"{username}PSWRDS.txt",f"Secured{username}PSWRDS.zip"), width=225, height=35, corner_radius=5, text="Export to Secure ZIP", fg_color="#a649ff")
     exp_passwords_btn.pack(pady=20)
-    
+    logout_btn = ctk.CTkButton(option_frame, command=lambda: logout(), width=225, height=35, corner_radius=5, text="Logout", fg_color="#a649ff")
+    logout_btn.pack(pady=20)
+
 def password_generation_screen():
     for widget in window.winfo_children():
         widget.destroy()
@@ -138,6 +139,23 @@ def informed_password_screen():
     gen_inf_pwd_button=ctk.CTkButton(informed_frame,command=lambda: informedPass(entry=informed_entry.get()),width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
     gen_inf_pwd_button.pack(pady=10)
     
+def logout():
+    global window
+    for widget in window.winfo_children():
+        widget.destroy()
+    pack_image()
+    homepage()
+
+def zip_and_secure(file_to_zip,output_zip_file):
+    if not os.path.exists(file_to_zip):
+        return
+    with open(file_to_zip, 'rb') as file:
+        data = file.read()
+    with pyzipper.AESZipFile(output_zip_file,'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zipf:
+        zipf.setpassword(password.encode()) 
+        zipf.writestr(file_to_zip, data)
+
+
 # creating a function that packs a frame to hold an image to the left side of the program
 def pack_image():
     global window,left_frame
