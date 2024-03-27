@@ -179,7 +179,8 @@ def get_data():
     password = password_ent.get()
     with open("hashed_pws.txt","r") as file:
         for line in file:
-            if encrypt(password) in line:
+            stored_username, stored_password = line.strip().split(":")
+            if username == stored_username and encrypt(password) == stored_password:
                 loginlabel = ctk.CTkLabel(homepage_frame,text="Logging in...",text_color="#66ff00",font=font3)
                 loginlabel.pack()
                 homepage_frame.update()  
