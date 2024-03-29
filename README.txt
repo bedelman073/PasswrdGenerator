@@ -8,8 +8,8 @@ Please pip install the following modules before you run the program:
 3.) secret
 4.) string
 6.) pyzipper
+7.) hashlib
 
 All passwords are securely exported to Secured"username"PSWRDS.zip, the file is secured with the password you created your generator account with. 
 
 There is a menu icon image file attached to the github, please download it and place it in the program folder. 
-  
