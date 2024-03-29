@@ -122,7 +122,7 @@ def rand_password_screen():
     num_disp.pack(pady=10)
     pass_query=ctk.CTkEntry(slider_frame,placeholder_text="What is this password for?",text_color="white", placeholder_text_color="white",width=225, height=35, corner_radius=5,border_color="#a649ff")
     pass_query.pack(pady=10)
-    gen_pwd_button=ctk.CTkButton(slider_frame,command=lambda: randomPass(password_length),width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
+    gen_pwd_button = ctk.CTkButton(slider_frame, command=lambda: randomPass(int(slider.get())), width=225, height=35, corner_radius=5, text="Generate!", fg_color="#a649ff")
     gen_pwd_button.pack(pady=10)
 
 def informed_password_screen():
